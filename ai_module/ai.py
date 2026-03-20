@@ -1,10 +1,21 @@
-def extract_skills(resume):
-    SKILLS_DB = [
-        "python", "java", "c", "c++", "sql", "excel", "power bi",
-        "html", "css", "javascript", "react", "node", "mongodb",
-        "machine learning", "data analysis"
-    ]
+# 📊 Dataset (skills database)
+SKILLS_DB = [
+    "python", "java", "c", "c++", "sql", "excel", "power bi",
+    "html", "css", "javascript", "react", "node", "mongodb",
+    "machine learning", "data analysis"
+]
 
+# 📊 Job role dataset
+JOB_SKILLS = {
+    "data analyst": ["python", "sql", "excel", "power bi"],
+    "web developer": ["html", "css", "javascript"],
+    "full stack developer": ["html", "css", "javascript", "react", "node", "mongodb"],
+    "ai engineer": ["python", "machine learning", "data analysis"]
+}
+
+
+# 🧠 Algorithm: Skill Extraction
+def extract_skills(resume):
     resume = resume.lower()
     found = []
 
@@ -12,32 +23,34 @@ def extract_skills(resume):
         if skill in resume:
             found.append(skill)
 
-    return found
+    return list(set(found))  # remove duplicates
 
 
+# 🧠 Algorithm: Gap Detection
 def get_missing_skills(skills, job_role):
-    JOB_SKILLS = {
-        "data analyst": ["python", "sql", "excel", "power bi"],
-        "web developer": ["html", "css", "javascript"],
-        "full stack developer": ["html", "css", "javascript", "react", "node", "mongodb"],
-        "software engineer": ["java", "python", "c++", "data structures"],
-        "ai engineer": ["python", "machine learning", "data analysis"]
-    }
-
     job_role = job_role.lower()
 
-    # 👉 If role exists
     if job_role in JOB_SKILLS:
         required = JOB_SKILLS[job_role]
     else:
-        # 👉 If role unknown → suggest common tech skills
-        required = ["python", "sql", "html", "css", "javascript"]
+        # fallback (unknown role)
+        required = SKILLS_DB[:5]
 
     missing = [s for s in required if s not in skills]
-
     return missing
 
 
+# 🧠 Algorithm: Metrics Calculation
+def calculate_match_score(found, missing):
+    total = len(found) + len(missing)
+
+    if total == 0:
+        return 0
+
+    return round((len(found) / total) * 100)
+
+
+# 🧠 Algorithm: Roadmap
 def generate_roadmap(missing):
     roadmap = []
 
@@ -47,3 +60,5 @@ def generate_roadmap(missing):
         roadmap.append(f"Build mini project using {skill}")
 
     return roadmap
+def simulate_training():
+    print("Training model using predefined dataset...")

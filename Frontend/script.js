@@ -32,11 +32,10 @@ async function analyze() {
         const match = Math.round((1 - data.missing_skills.length / total) * 100);
 
         output.innerText =
-            "🎯 Match Score: " + match + "%\n\n" +
-            "✅ Missing Skills:\n" +
-            data.missing_skills.join(", ") +
-            "\n\n📌 Roadmap:\n" +
-            data.roadmap.join("\n");
+            "🎯 Match Score: " + data.match_score + "%\n\n" +
+            "🧠 Skills Found:\n" + data.skills_found.join(", ") +
+            "\n\n❌ Missing Skills:\n" + data.missing_skills.join(", ") +
+            "\n\n📌 Roadmap:\n" + data.roadmap.join("\n");
 
     } catch (error) {
         loader.style.display = "none";
