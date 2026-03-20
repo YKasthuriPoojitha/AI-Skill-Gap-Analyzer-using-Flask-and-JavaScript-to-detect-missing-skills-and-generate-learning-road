@@ -5,6 +5,10 @@
 Many students are unsure about the skills required for their desired job roles. There is no simple tool that clearly identifies missing skills and provides a structured learning path.
 
 ---
+## 📸 Screenshot
+![App Screenshot](screenshot.png)
+
+---
 
 ## 💡 Solution
 
