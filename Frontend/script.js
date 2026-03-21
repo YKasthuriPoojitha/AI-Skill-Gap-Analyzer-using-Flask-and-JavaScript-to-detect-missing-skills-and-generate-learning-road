@@ -20,12 +20,8 @@ async function analyze() {
             })
         });
 
+        // 🔥 IMPORTANT FIX
         const data = await response.json();
-
-        if (data.error) {
-            output.innerText = "Error: " + data.error;
-            return;
-        }
 
         output.innerText =
             "Skills: " + data.skills.join(", ") + "\n\n" +
@@ -35,6 +31,7 @@ async function analyze() {
 
     } catch (error) {
         output.innerText = "Error: " + error;
+        console.error(error);
     }
 
     loader.style.display = "none";
