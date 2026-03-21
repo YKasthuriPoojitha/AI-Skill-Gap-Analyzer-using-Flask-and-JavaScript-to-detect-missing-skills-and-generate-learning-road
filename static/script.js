@@ -1,9 +1,10 @@
 async function analyze() {
     const resume = document.getElementById("resume").value;
     const jobRole = document.getElementById("jobRole").value;
+
     const output = document.getElementById("output");
 
-    output.innerText = "Analyzing...";
+    output.innerHTML = "Loading...";
 
     try {
         const response = await fetch("/analyze", {
@@ -19,13 +20,12 @@ async function analyze() {
 
         const data = await response.json();
 
-        output.innerText =
-            "Skills: " + data.skills.join(", ") + "\n\n" +
-            "Missing Skills: " + data.missing_skills.join(", ") + "\n\n" +
-            "Roadmap: " + data.roadmap.join(", ") + "\n\n" +
-            "Score: " + data.score + "%";
-
+        output.innerHTML = `
+            <h3>Score: ${data.score}%</h3>
+            <p><b>Missing Skills:</b> ${data.missing_skills.join(", ")}</p>
+            <p><b>Roadmap:</b> ${data.roadmap.join(", ")}</p>
+        `;
     } catch (error) {
-        output.innerText = "Error: " + error;
+        output.innerHTML = "Error: " + error;
     }
 }
