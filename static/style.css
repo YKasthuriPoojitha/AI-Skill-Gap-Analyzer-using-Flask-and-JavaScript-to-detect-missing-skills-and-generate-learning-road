@@ -1,8 +1,7 @@
 body {
     margin: 0;
-    font-family: Arial;
+    font-family: 'Poppins', sans-serif;
     background: linear-gradient(135deg, #fceabb, #f8b500);
-    height: 100vh;
     overflow: hidden;
 }
 
@@ -10,8 +9,8 @@ body {
 .bubbles span {
     position: absolute;
     bottom: -100px;
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     background: rgba(255,255,255,0.4);
     border-radius: 50%;
     animation: rise 10s linear infinite;
@@ -22,17 +21,10 @@ body {
 .bubbles span:nth-child(3){ left:30%; animation-duration:10s;}
 .bubbles span:nth-child(4){ left:50%; animation-duration:7s;}
 .bubbles span:nth-child(5){ left:70%; animation-duration:9s;}
-.bubbles span:nth-child(6){ left:80%; animation-duration:11s;}
 
 @keyframes rise {
-    0% {
-        transform: translateY(0);
-        opacity: 0.6;
-    }
-    100% {
-        transform: translateY(-100vh);
-        opacity: 0;
-    }
+    0% { transform: translateY(0); opacity: 0.6; }
+    100% { transform: translateY(-100vh); opacity: 0; }
 }
 
 /* CARD */
@@ -40,28 +32,49 @@ body {
     position: relative;
     z-index: 1;
     background: rgba(255,255,255,0.3);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(15px);
     padding: 30px;
-    width: 400px;
+    width: 420px;
     margin: auto;
-    margin-top: 80px;
+    margin-top: 60px;
     border-radius: 20px;
     text-align: center;
 }
 
+/* INPUT */
 textarea, input {
     width: 90%;
-    padding: 10px;
+    padding: 12px;
     margin: 10px;
     border-radius: 10px;
     border: none;
+    font-size: 15px;
 }
 
+::placeholder {
+    color: gray;
+}
+
+/* BUTTON */
 button {
-    padding: 10px 20px;
+    padding: 12px 25px;
     background: orange;
     color: white;
     border: none;
-    border-radius: 20px;
+    border-radius: 25px;
     cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: darkorange;
+    transform: scale(1.05);
+}
+
+/* OUTPUT */
+pre {
+    text-align: left;
+    background: rgba(255,255,255,0.4);
+    padding: 10px;
+    border-radius: 10px;
 }

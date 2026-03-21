@@ -1,13 +1,22 @@
 async function analyze() {
+    const fileInput = document.getElementById("file").files[0];
     const resume = document.getElementById("resume").value;
     const jobRole = document.getElementById("jobRole").value;
 
-    const output = document.getElementById("output");
+    let response;
 
-    output.innerHTML = "Loading...";
+    if (fileInput) {
+        const formData = new FormData();
+        formData.append("file", fileInput);
+        formData.append("jobRole", jobRole);
 
-    try {
-        const response = await fetch("/analyze", {
+        response = await fetch("/analyze", {
+            method: "POST",
+            body: formData
+        });
+
+    } else {
+        response = await fetch("/analyze", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -17,15 +26,12 @@ async function analyze() {
                 jobRole: jobRole
             })
         });
-
-        const data = await response.json();
-
-        output.innerHTML = `
-            <h3>Score: ${data.score}%</h3>
-            <p><b>Missing Skills:</b> ${data.missing_skills.join(", ")}</p>
-            <p><b>Roadmap:</b> ${data.roadmap.join(", ")}</p>
-        `;
-    } catch (error) {
-        output.innerHTML = "Error: " + error;
     }
+
+    const data = await response.json();
+
+    document.getElementById("output").innerText =
+        "Score: " + data.score + "%\n\n" +
+        "Missing Skills: " + data.missing_skills.join(", ") + "\n\n" +
+        "Roadmap:\n" + data.roadmap.join("\n");
 }

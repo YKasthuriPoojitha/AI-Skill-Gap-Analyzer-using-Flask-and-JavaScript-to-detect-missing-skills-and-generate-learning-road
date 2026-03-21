@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>AI Skill Gap Analyzer</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
@@ -9,15 +10,16 @@
 
 <div class="bubbles">
     <span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span>
 </div>
 
 <div class="container">
     <h1>🚀 AI Skill Gap Analyzer</h1>
 
-    <textarea id="resume"></textarea>
+    <textarea id="resume" placeholder="Enter your skills (or upload resume)"></textarea>
 
-    <input type="text" id="jobRole">
+    <input type="file" id="file">
+
+    <input type="text" id="jobRole" placeholder="Enter job role">
 
     <button onclick="analyze()">Analyze</button>
 
@@ -25,7 +27,54 @@
     <pre id="output"></pre>
 </div>
 
-<script src="{{ url_for('static', filename='script.js') }}"></script>
+<script>
+async function analyze() {
+    const fileInput = document.getElementById("file").files[0];
+    const resume = document.getElementById("resume").value;
+    const jobRole = document.getElementById("jobRole").value;
+    const output = document.getElementById("output");
+
+    output.innerText = "Analyzing...";
+
+    let response;
+
+    try {
+        if (fileInput) {
+            const formData = new FormData();
+            formData.append("file", fileInput);
+            formData.append("jobRole", jobRole);
+
+            response = await fetch("/analyze", {
+                method: "POST",
+                body: formData
+            });
+
+        } else {
+            response = await fetch("/analyze", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    resume: resume,
+                    jobRole: jobRole
+                })
+            });
+        }
+
+        const data = await response.json();
+
+        output.innerText =
+            "Score: " + data.score + "%\n\n" +
+            "Detected Skills: " + data.skills.join(", ") + "\n\n" +
+            "Missing Skills: " + data.missing_skills.join(", ") + "\n\n" +
+            "Roadmap:\n" + data.roadmap.join("\n");
+
+    } catch (error) {
+        output.innerText = "Error: " + error;
+    }
+}
+</script>
 
 </body>
 </html>
