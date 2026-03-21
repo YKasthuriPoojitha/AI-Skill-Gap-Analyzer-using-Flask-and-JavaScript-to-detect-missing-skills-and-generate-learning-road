@@ -1,12 +1,9 @@
 async function analyze() {
     const resume = document.getElementById("resume").value;
     const jobRole = document.getElementById("jobRole").value;
-
     const output = document.getElementById("output");
-    const loader = document.getElementById("loader");
 
-    loader.style.display = "block";
-    output.innerText = "";
+    output.innerText = "Analyzing...";
 
     try {
         const response = await fetch("/analyze", {
@@ -20,7 +17,6 @@ async function analyze() {
             })
         });
 
-        // 🔥 IMPORTANT FIX
         const data = await response.json();
 
         output.innerText =
@@ -31,8 +27,5 @@ async function analyze() {
 
     } catch (error) {
         output.innerText = "Error: " + error;
-        console.error(error);
     }
-
-    loader.style.display = "none";
 }

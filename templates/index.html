@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Skill Gap Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="bubbles">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<div class="container">
+    <h1>🚀 AI Skill Gap Analyzer</h1>
+
+    <textarea id="resume" placeholder="Enter your skills"></textarea>
+
+    <input type="text" id="jobRole" placeholder="Enter job role">
+
+    <button onclick="analyze()">Analyze</button>
+
+    <h2>Result:</h2>
+    <pre id="output"></pre>
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
