@@ -1,30 +1,44 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
+import os
 
-app = Flask(__name__, template_folder="../Frontend")
+app = Flask(__name__, static_folder="../Frontend", static_url_path="/")
 CORS(app)
 
-@app.route('/')
+# Serve frontend
+@app.route("/")
 def home():
-    return render_template("index.html")
+    return send_from_directory(app.static_folder, "index.html")
 
-@app.route('/analyze', methods=['POST'])
+@app.route("/<path:path>")
+def static_files(path):
+    return send_from_directory(app.static_folder, path)
+
+# API
+@app.route("/analyze", methods=["POST"])
 def analyze():
     try:
         data = request.get_json()
 
         resume = data.get("resume", "")
-        job_role = data.get("jobRole", "")
+        job_role = data.get("jobRole", "").lower()
 
-        # SIMPLE LOGIC (no ai_module dependency)
-        skills = [s.strip() for s in resume.lower().split(",")]
+        skills = [s.strip() for s in resume.lower().split(",") if s.strip()]
 
-        required = ["html", "css", "javascript", "react", "node"]
+        job_roles = {
+            "data analyst": ["python", "sql", "excel", "power bi"],
+            "web developer": ["html", "css", "javascript"],
+            "full stack developer": ["html", "css", "javascript", "react", "node", "mongodb"]
+        }
+
+        required = job_roles.get(job_role, [])
+
         missing = [skill for skill in required if skill not in skills]
 
-        roadmap = ["Learn " + skill for skill in missing]
+        roadmap = [f"Learn {skill}" for skill in missing] if missing else ["You are well prepared 🎉"]
 
-        score = int((len(skills) / (len(skills) + len(missing))) * 100) if (len(skills)+len(missing)) else 0
+        total = len(required)
+        score = int(((total - len(missing)) / total) * 100) if total > 0 else 0
 
         return jsonify({
             "skills": skills,
@@ -37,5 +51,7 @@ def analyze():
         return jsonify({"error": str(e)}), 500
 
 
+# IMPORTANT FOR DEPLOYMENT
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
