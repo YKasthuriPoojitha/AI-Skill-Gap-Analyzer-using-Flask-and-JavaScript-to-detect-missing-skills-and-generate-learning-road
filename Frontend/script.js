@@ -1,44 +1,47 @@
 async function analyze() {
+
     const resume = document.getElementById("resume").value;
     const jobRole = document.getElementById("jobRole").value;
-    const output = document.getElementById("output");
+
     const loader = document.getElementById("loader");
+    const output = document.getElementById("output");
 
-    if (!resume || !jobRole) {
-        output.innerText = "⚠️ Please fill all fields!";
-        return;
-    }
-
+    // Show loader
     loader.style.display = "block";
     output.innerText = "";
 
     try {
-        const response = await fetch("http://127.0.0.1:5000/analyze", {
+        const response = await fetch("/analyze", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
                 resume: resume,
-                job_role: jobRole
+                jobRole: jobRole
             })
         });
 
+        // Handle backend errors
+        if (!response.ok) {
+            const text = await response.text();
+            throw new Error(text);
+        }
+
         const data = await response.json();
 
+        // Hide loader
         loader.style.display = "none";
 
-        const total = data.missing_skills.length + data.roadmap.length / 3;
-        const match = Math.round((1 - data.missing_skills.length / total) * 100);
-
-        output.innerText =
-            "🎯 Match Score: " + data.match_score + "%\n\n" +
-            "🧠 Skills Found:\n" + data.skills_found.join(", ") +
-            "\n\n❌ Missing Skills:\n" + data.missing_skills.join(", ") +
-            "\n\n📌 Roadmap:\n" + data.roadmap.join("\n");
+        // Show result nicely
+        output.innerText = 
+            "Skills: " + data.skills + "\n\n" +
+            "Missing Skills: " + data.missing_skills + "\n\n" +
+            "Roadmap: " + data.roadmap + "\n\n" +
+            "Score: " + data.score;
 
     } catch (error) {
         loader.style.display = "none";
-        output.innerText = "❌ Error connecting to backend";
+        output.innerText = "Error: " + error.message;
     }
 }

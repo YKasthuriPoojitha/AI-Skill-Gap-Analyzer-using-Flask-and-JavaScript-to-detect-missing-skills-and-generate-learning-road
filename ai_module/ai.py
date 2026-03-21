@@ -1,64 +1,59 @@
-# 📊 Dataset (skills database)
-SKILLS_DB = [
-    "python", "java", "c", "c++", "sql", "excel", "power bi",
-    "html", "css", "javascript", "react", "node", "mongodb",
-    "machine learning", "data analysis"
-]
-
-# 📊 Job role dataset
-JOB_SKILLS = {
-    "data analyst": ["python", "sql", "excel", "power bi"],
-    "web developer": ["html", "css", "javascript"],
-    "full stack developer": ["html", "css", "javascript", "react", "node", "mongodb"],
-    "ai engineer": ["python", "machine learning", "data analysis"]
-}
-
-
-# 🧠 Algorithm: Skill Extraction
 def extract_skills(resume):
+    # Simple skill extraction (based on keywords)
     resume = resume.lower()
-    found = []
 
-    for skill in SKILLS_DB:
+    known_skills = [
+        "python", "java", "c", "c++", "javascript", "html", "css",
+        "react", "node", "flask", "django", "sql", "mongodb"
+    ]
+
+    skills = []
+
+    for skill in known_skills:
         if skill in resume:
-            found.append(skill)
+            skills.append(skill)
 
-    return list(set(found))  # remove duplicates
+    return skills
 
 
-# 🧠 Algorithm: Gap Detection
 def get_missing_skills(skills, job_role):
     job_role = job_role.lower()
 
-    if job_role in JOB_SKILLS:
-        required = JOB_SKILLS[job_role]
-    else:
-        # fallback (unknown role)
-        required = SKILLS_DB[:5]
+    role_requirements = {
+        "full stack developer": ["html", "css", "javascript", "react", "node", "mongodb"],
+        "backend developer": ["python", "flask", "django", "sql"],
+        "frontend developer": ["html", "css", "javascript", "react"],
+        "data scientist": ["python", "sql", "machine learning"],
+        "ai engineer": ["python", "machine learning", "deep learning"]
+    }
 
-    missing = [s for s in required if s not in skills]
+    required = role_requirements.get(job_role, [])
+
+    missing = []
+    for skill in required:
+        if skill not in skills:
+            missing.append(skill)
+
     return missing
 
 
-# 🧠 Algorithm: Metrics Calculation
-def calculate_match_score(found, missing):
-    total = len(found) + len(missing)
+def generate_roadmap(missing_skills):
+    roadmap = []
+
+    for skill in missing_skills:
+        roadmap.append(f"Learn {skill}")
+
+    if not roadmap:
+        return ["You are well prepared! 🎉"]
+
+    return roadmap
+
+
+def calculate_match_score(skills, missing_skills):
+    total = len(skills) + len(missing_skills)
 
     if total == 0:
         return 0
 
-    return round((len(found) / total) * 100)
-
-
-# 🧠 Algorithm: Roadmap
-def generate_roadmap(missing):
-    roadmap = []
-
-    for skill in missing:
-        roadmap.append(f"Learn basics of {skill}")
-        roadmap.append(f"Practice {skill} projects")
-        roadmap.append(f"Build mini project using {skill}")
-
-    return roadmap
-def simulate_training():
-    print("Training model using predefined dataset...")
+    score = (len(skills) / total) * 100
+    return round(score, 2)
