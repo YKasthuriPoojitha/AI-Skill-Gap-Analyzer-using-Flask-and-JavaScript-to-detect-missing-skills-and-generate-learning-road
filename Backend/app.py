@@ -2,19 +2,20 @@ from flask import Flask, request, jsonify, render_template
 import sys
 import os
 
-# Fix import path
+# Fix import path (for ai_module)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from ai_module.ai import extract_skills, get_missing_skills, generate_roadmap, calculate_match_score
 
-app = Flask(__name__, template_folder='../Frontend')
+# Tell Flask where frontend files are
+app = Flask(__name__, template_folder='../Frontend', static_folder='../Frontend')
 
-# 👇 CHANGE THIS PART
+# ✅ HOME ROUTE (shows your website)
 @app.route('/')
 def home():
     return render_template('index.html')
 
-
+# ✅ ANALYZE API
 @app.route('/analyze', methods=['POST'])
 def analyze():
     data = request.json
@@ -33,3 +34,7 @@ def analyze():
         "roadmap": roadmap,
         "score": score
     })
+
+# ✅ RUN APP
+if __name__ == '__main__':
+    app.run(debug=True)
