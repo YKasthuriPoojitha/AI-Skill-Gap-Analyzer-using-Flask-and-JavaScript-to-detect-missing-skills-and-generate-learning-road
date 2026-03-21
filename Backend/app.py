@@ -1,40 +1,35 @@
+from flask import Flask, request, jsonify, render_template
 import sys
 import os
 
-# 🔥 Fix import path
+# Fix import path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-from ai_module.ai import extract_skills, get_missing_skills, generate_roadmap,calculate_match_score
+from ai_module.ai import extract_skills, get_missing_skills, generate_roadmap, calculate_match_score
 
-app = Flask(__name__)
-CORS(app)
+app = Flask(__name__, template_folder='../Frontend')
 
+# 👇 CHANGE THIS PART
 @app.route('/')
 def home():
-    return "Backend running 🚀"
+    return render_template('index.html')
+
 
 @app.route('/analyze', methods=['POST'])
 def analyze():
     data = request.json
 
     resume = data.get("resume", "")
-    job_role = data.get("job_role", "")
+    job_role = data.get("jobRole", "")
 
     skills = extract_skills(resume)
     missing = get_missing_skills(skills, job_role)
     roadmap = generate_roadmap(missing)
     score = calculate_match_score(skills, missing)
 
-
-
     return jsonify({
-        "skills_found": skills,
+        "skills": skills,
         "missing_skills": missing,
         "roadmap": roadmap,
-        "match_score": score
+        "score": score
     })
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
