@@ -1,80 +1,34 @@
 body {
-    margin: 0;
-    font-family: 'Poppins', sans-serif;
+    font-family: Arial;
     background: linear-gradient(135deg, #fceabb, #f8b500);
-    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-/* BUBBLES */
-.bubbles span {
-    position: absolute;
-    bottom: -100px;
-    width: 50px;
-    height: 50px;
-    background: rgba(255,255,255,0.4);
-    border-radius: 50%;
-    animation: rise 10s linear infinite;
-}
-
-.bubbles span:nth-child(1){ left:10%; animation-duration:8s;}
-.bubbles span:nth-child(2){ left:20%; animation-duration:12s;}
-.bubbles span:nth-child(3){ left:30%; animation-duration:10s;}
-.bubbles span:nth-child(4){ left:50%; animation-duration:7s;}
-.bubbles span:nth-child(5){ left:70%; animation-duration:9s;}
-
-@keyframes rise {
-    0% { transform: translateY(0); opacity: 0.6; }
-    100% { transform: translateY(-100vh); opacity: 0; }
-}
-
-/* CARD */
 .container {
-    position: relative;
-    z-index: 1;
-    background: rgba(255,255,255,0.3);
-    backdrop-filter: blur(15px);
+    background: white;
     padding: 30px;
-    width: 420px;
-    margin: auto;
-    margin-top: 60px;
-    border-radius: 20px;
+    border-radius: 15px;
+    width: 400px;
     text-align: center;
 }
 
-/* INPUT */
 textarea, input {
     width: 90%;
-    padding: 12px;
+    padding: 10px;
     margin: 10px;
-    border-radius: 10px;
-    border: none;
-    font-size: 15px;
 }
 
-::placeholder {
-    color: gray;
-}
-
-/* BUTTON */
 button {
-    padding: 12px 25px;
+    padding: 10px 20px;
     background: orange;
     color: white;
     border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: 0.3s;
+    border-radius: 10px;
 }
 
-button:hover {
-    background: darkorange;
-    transform: scale(1.05);
-}
-
-/* OUTPUT */
 pre {
     text-align: left;
-    background: rgba(255,255,255,0.4);
-    padding: 10px;
-    border-radius: 10px;
 }

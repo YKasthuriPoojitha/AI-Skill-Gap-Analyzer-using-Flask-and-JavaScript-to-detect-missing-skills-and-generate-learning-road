@@ -2,20 +2,15 @@
 <html>
 <head>
     <title>AI Skill Gap Analyzer</title>
-
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
 
-<div class="bubbles">
-    <span></span><span></span><span></span><span></span><span></span>
-</div>
-
 <div class="container">
     <h1>🚀 AI Skill Gap Analyzer</h1>
 
-    <textarea id="resume" placeholder="Enter your skills (or upload resume)"></textarea>
+    <textarea id="resume" placeholder="Enter your skills OR upload resume"></textarea>
 
     <input type="file" id="file">
 
@@ -36,9 +31,9 @@ async function analyze() {
 
     output.innerText = "Analyzing...";
 
-    let response;
-
     try {
+        let response;
+
         if (fileInput) {
             const formData = new FormData();
             formData.append("file", fileInput);
@@ -62,6 +57,10 @@ async function analyze() {
             });
         }
 
+        if (!response.ok) {
+            throw new Error("Server error");
+        }
+
         const data = await response.json();
 
         output.innerText =
@@ -71,7 +70,7 @@ async function analyze() {
             "Roadmap:\n" + data.roadmap.join("\n");
 
     } catch (error) {
-        output.innerText = "Error: " + error;
+        output.innerText = "Error: " + error.message;
     }
 }
 </script>
