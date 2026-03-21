@@ -1,4 +1,4 @@
-# 🚀 AI Skill Gap Analyzer
+## 🚀 AI Skill Gap Analyzer
 
 ## 📌 Problem
 
